@@ -2216,6 +2216,7 @@ if (errorMestre) throw errorMestre;
                 formData.append('file', elements.csvFileInput.files[0], 'data.csv');
                 const configFornos = {};
                 fornosAtivos.forEach(forno => { configFornos[forno] = Array.from(document.querySelectorAll(`.gt-input-field-${forno}`)).map(input => input.value).filter(Boolean); });
+                // O n8n usará essas configs para o cálculo dinâmico
                 formData.append('config_fornos', JSON.stringify(configFornos));
                 try {
                     const response = await fetch(n8nGerarArranjoUrl, { method: 'POST', body: formData });
