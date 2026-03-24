@@ -2739,7 +2739,7 @@ card.dataset.peso = cardData.peso_unit || 0;
                     <p><b>OP:</b> ${card.dataset.ordemProducao} ${empilhamentoTag}</p>
                     <p><b>Código:</b> ${card.dataset.codigo}</p>
                     <p>${cardData.Descrição || 'N/A'}</p> 
-                    <p><b>Bitola:</b> ${cardData.Dimensões || 'N/A'}</p>
+                    <p><b>Bitola:</b> ${cardData.Dimensões || 'N/A'} <small>(Calc: ${cardData.Dimensões_MM}mm)</small></p>
                     <p><b>Qtd:</b> ${cardData.quantidade} <small style="color: var(--text-secondary); margin-left: 10px;">(${pesoTotal} kg)</small></p>
                     <p class="gt-display" onclick="editarGT(this, '${cardData.id}')" title="Clique para editar apenas nesta simulação">
                         <b style="color: var(--color-info);">GT:</b> ${card.dataset.gt || 'N/A'}
