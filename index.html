@@ -2711,7 +2711,7 @@ function vincularEventosDragDrop() {
     });
 }
 
-            function criarCard(containerDOM, cardData) {
+function criarCard(containerDOM, cardData) {
                 const card = document.createElement('div');
                 card.className = 'item-card' + (cardData.gtEditado ? ' gt-editado' : '');
                 card.draggable = true;
@@ -2722,10 +2722,10 @@ function vincularEventosDragDrop() {
                 card.dataset.dimensao = cardData.Dimensões || 'N/A';
                 card.dataset.gt = cardData.gt || '';
                 card.dataset.quantidade = cardData.quantidade || 0;
-card.dataset.peso = cardData.peso_unit || 0;
-    card.dataset.isEmpilhado = cardData.isEmpilhado || false;
-    card.dataset.gtEditado = cardData.gtEditado || false; // Guarda o estado da edição no HTML
-    card.dataset.dataOp = cardData.data_op || '';
+                card.dataset.peso = cardData.peso_unit || 0;
+                card.dataset.isEmpilhado = cardData.isEmpilhado || false;
+                card.dataset.gtEditado = cardData.gtEditado || false;
+                card.dataset.dataOp = cardData.data_op || '';
                 card.dataset.fornoDestino = cardData.forno_destino || '';
                 
                 const empilhamentoTag = cardData.isEmpilhado ? '<span class="tag-2x">2X</span>' : '';
@@ -2740,7 +2740,7 @@ card.dataset.peso = cardData.peso_unit || 0;
                     <p><b>OP:</b> ${card.dataset.ordemProducao} ${empilhamentoTag}</p>
                     <p><b>Código:</b> ${card.dataset.codigo}</p>
                     <p>${cardData.Descrição || 'N/A'}</p> 
-                    <p><b>Bitola:</b> ${cardData.Dimensões || 'N/A'} <small>(Calc: ${cardData.Dimensões_MM}mm)</small></p>
+                    <p><b>Bitola:</b> ${cardData.Dimensões || 'N/A'} <small>(Calc: ${cardData.Dimensões_MM || 0}mm)</small></p>
                     <p><b>Qtd:</b> ${cardData.quantidade} <small style="color: var(--text-secondary); margin-left: 10px;">(${pesoTotal} kg)</small></p>
                     <p class="gt-display" onclick="editarGT(this, '${cardData.id}')" title="Clique para editar apenas nesta simulação">
                         <b style="color: var(--color-info);">GT:</b> ${card.dataset.gt || 'N/A'}
@@ -2750,6 +2750,7 @@ card.dataset.peso = cardData.peso_unit || 0;
                 `;
                 containerDOM.appendChild(card);
             }
+
             window.removerCardPeloEstado = function(cardId) {
                 for (const forno in estadoFornos) {
                     const index = estadoFornos[forno].cards.findIndex(c => c.id === cardId);
@@ -2758,6 +2759,7 @@ card.dataset.peso = cardData.peso_unit || 0;
                 const index = estadoPendentes.findIndex(c => c.id === cardId);
                 if (index > -1) { estadoPendentes.splice(index, 1); renderizarTudoAPartirDoEstado(); }
             }
+
             window.editarGT = function(element, cardId) {
                 const cardData = findCardDataById(cardId);
                 if (!cardData) return;
@@ -2766,10 +2768,12 @@ card.dataset.peso = cardData.peso_unit || 0;
                 input.focus();
                 input.select();
             }
+
             window.cancelarEdicao = function(element, cardId) {
                 const cardData = findCardDataById(cardId);
                 if(cardData) element.parentElement.innerHTML = `<b>GT:</b> ${cardData.gt || 'N/A'}`;
             }
+
             window.reavaliarItem = function(event, input, cardId) {
                 if (event.key === 'Enter') {
                     const novoGT = input.value.trim();
@@ -2778,14 +2782,8 @@ card.dataset.peso = cardData.peso_unit || 0;
                         cancelarEdicao(input, cardId); 
                         return; 
                     }
-                    
-                    // Atualiza apenas localmente no objeto do card
                     cardData.gt = novoGT;
-                    cardData.gtEditado = true; // Marca o item como editado nesta sessão
-                    
-                    // Feedback visual no console para auditoria rápida
-                    console.log(`GT do item ${cardData.codigo} alterado localmente para: ${novoGT} (Não salvo no Banco)`);
-                    
+                    cardData.gtEditado = true;
                     renderizarTudoAPartirDoEstado();
                 } else if (event.key === 'Escape') { 
                     cancelarEdicao(input, cardId); 
